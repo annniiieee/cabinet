@@ -1,0 +1,115 @@
+version: '3.8'
+
+services:
+  cabinet-leader:
+    build: .
+    container_name: cabinet-leader
+    hostname: cabinet-leader
+    environment:
+      - CABINET_ID=0
+      - CABINET_SERVERS=5
+      - CABINET_CONFIG_PATH=./config/cluster_docker.conf
+      - CABINET_BATCH_SIZE=10
+      - CABINET_LOG_LEVEL=info
+      - CABINET_EVAL_TYPE=0  # 0=plain msg, 1=tpcc, 2=mongodb
+      - CABINET_ENABLE_PRIORITY=true
+    ports:
+      - "10000:10000"
+    volumes:
+      - ./logs:/root/logs
+      - ./data:/root/data
+    networks:
+      - cabinet-network
+    depends_on:
+      - cabinet-follower-1
+      - cabinet-follower-2
+      - cabinet-follower-3
+      - cabinet-follower-4
+
+  cabinet-follower-1:
+    build: .
+    container_name: cabinet-follower-1
+    hostname: cabinet-follower-1
+    environment:
+      - CABINET_ID=1
+      - CABINET_SERVERS=5
+      - CABINET_CONFIG_PATH=./config/cluster_docker.conf
+      - CABINET_BATCH_SIZE=10
+      - CABINET_LOG_LEVEL=info
+      - CABINET_EVAL_TYPE=0
+      - CABINET_ENABLE_PRIORITY=true
+    ports:
+      - "10001:10000"
+    volumes:
+      - ./logs:/root/logs
+      - ./data:/root/data
+    networks:
+      - cabinet-network
+
+  cabinet-follower-2:
+    build: .
+    container_name: cabinet-follower-2
+    hostname: cabinet-follower-2
+    environment:
+      - CABINET_ID=2
+      - CABINET_SERVERS=5
+      - CABINET_CONFIG_PATH=./config/cluster_docker.conf
+      - CABINET_BATCH_SIZE=10
+      - CABINET_LOG_LEVEL=info
+      - CABINET_EVAL_TYPE=0
+      - CABINET_ENABLE_PRIORITY=true
+    ports:
+      - "10002:10000"
+    volumes:
+      - ./logs:/root/logs
+      - ./data:/root/data
+    networks:
+      - cabinet-network
+
+  cabinet-follower-3:
+    build: .
+    container_name: cabinet-follower-3
+    hostname: cabinet-follower-3
+    environment:
+      - CABINET_ID=3
+      - CABINET_SERVERS=5
+      - CABINET_CONFIG_PATH=./config/cluster_docker.conf
+      - CABINET_BATCH_SIZE=10
+      - CABINET_LOG_LEVEL=info
+      - CABINET_EVAL_TYPE=0
+      - CABINET_ENABLE_PRIORITY=true
+    ports:
+      - "10003:10000"
+    volumes:
+      - ./logs:/root/logs
+      - ./data:/root/data
+    networks:
+      - cabinet-network
+
+  cabinet-follower-4:
+    build: .
+    container_name: cabinet-follower-4
+    hostname: cabinet-follower-4
+    environment:
+      - CABINET_ID=4
+      - CABINET_SERVERS=5
+      - CABINET_CONFIG_PATH=./config/cluster_docker.conf
+      - CABINET_BATCH_SIZE=10
+      - CABINET_LOG_LEVEL=info
+      - CABINET_EVAL_TYPE=0
+      - CABINET_ENABLE_PRIORITY=true
+    ports:
+      - "10004:10000"
+    volumes:
+      - ./logs:/root/logs
+      - ./data:/root/data
+    networks:
+      - cabinet-network
+
+networks:
+  cabinet-network:
+    driver: bridge
+
+volumes:
+  logs:
+  data:
